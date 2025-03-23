@@ -28,6 +28,15 @@ from colorama import Fore, Style
 import json
 import logging
 import time
+from kivy.uix.spinner import Spinner  # Import Spinner
+from kivy.properties import StringProperty  # Import StringProperty
+
+from kivy.uix.boxlayout import BoxLayout  # Import BoxLayout
+from kivy.uix.floatlayout import FloatLayout  # Import FloatLayout
+from kivy.app import App  # Import App
+from kivy.uix.image import Image  # Import Image
+
+
 
 
 # Function to check and install required packages
@@ -135,9 +144,13 @@ def load_settings():
     try:
         with open('settings.json', 'r') as f:
             return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
+    except FileNotFoundError:
+        print(Fore.RED + "Settings file not found. A new settings file will be created." + Style.RESET_ALL)
+        return None
+    except json.JSONDecodeError:
         print(Fore.RED + "Error loading settings. The file may be corrupted." + Style.RESET_ALL)
         return None
+
 
 def get_serial_settings(protocol):
     # Load settings if available
@@ -197,7 +210,49 @@ def get_serial_settings(protocol):
 
     return port, baudrate, timeout
 
-# Function to choose the type of data to send
+class SpinnerApp(App):
+    selected_value = StringProperty("Select an option")
+
+    def build(self):
+        layout = FloatLayout()  # Use FloatLayout for background image
+        background = Image(source=self.load_image_path(), allow_stretch=True, keep_ratio=False)
+        layout.add_widget(background)  # Add background image
+
+
+    def load_image_path(self):
+        """Load the image path from the settings file."""
+        settings = load_settings()
+        if settings and 'image_path' in settings:
+            return settings['image_path']
+        else:
+            # Default image path if not set in settings
+            return '.\\84d69a73-48a8-4b51-a75c-fa93bba9bdcc.webp'
+
+        box_layout = BoxLayout(orientation='vertical')  # Create a BoxLayout for the spinner
+        layout.add_widget(box_layout)  # Add the BoxLayout to the layout
+
+        spinner = Spinner(
+            text=self.selected_value,
+            values=('Text (ASCII or Unicode) for UART', 'I2C Data', 'SPI Data', 'RS232 Data', 
+                     'RS485 Data', 'TTL Data', 'Control Command (e.g., Start/Stop)', 
+                     'OMRON PLC', 'MODICON PLC', 'SETTINGS'),
+            size_hint=(None, None),
+            size=(200, 100),
+            text_size=(200, None),
+        )
+        spinner.bind(text=self.on_spinner_select)
+        box_layout.add_widget(spinner)  # Add spinner to the BoxLayout
+
+
+        return layout
+
+    def on_spinner_select(self, spinner, text):
+        self.selected_value = text
+        print(f'Selected: {text}')
+
+if __name__ == '__main__':
+    SpinnerApp().run()
+
 def choose_data_type():
     print("\nChoose the type of data to send:")
     print("1. Text (ASCII or Unicode) for UART")
@@ -511,7 +566,9 @@ Feature/Protocol Overview:
 
     display_banner()
     protocol = choose_data_type()
+    retries = 3  # Initialize retries with a default value
     retries = int(input("Enter the number of retries (default: 3): ") or retries)
+
 
 
     if port is None or baudrate is None or timeout is None:
