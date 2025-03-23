@@ -6,6 +6,8 @@ from kivy.properties import StringProperty
 from kivy.uix.image import Image
 from kivy.core.window import Window
 from settings import IMAGE_SOURCE, SettingsScreen  # Import SettingsScreen from settings
+from kivy.uix.filechooser import FileChooserIconView  # Import FileChooser for selecting files
+
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup  # Import Popup for creating a new window
 from kivy.uix.button import Button  # Import Button for actions
@@ -38,9 +40,12 @@ class LoadSpecificImageApp(App):
 
         # Load image source from settings
         image_source = IMAGE_SOURCE  # Load image source from settings
-        background_image = Image(source=image_source, allow_stretch=True, keep_ratio=True, size_hint=(None, None), size=(800, 600), pos_hint={'center_x': 0.5, 'center_y': 0.5})  # Center the image
-        background_image.bind(size=self.update_image_size)  # Bind image size to window size
-        main_layout.add_widget(background_image)  # Add background image to layout
+        self.background_image = Image(source=image_source, allow_stretch=True, keep_ratio=True, size_hint=(None, None), size=(800, 600), pos_hint={'center_x': 0.5, 'center_y': 0.5})  # Center the image
+
+        self.background_image.bind(size=self.update_image_size)  # Bind image size to window size
+
+        main_layout.add_widget(self.background_image)  # Add background image to layout
+
 
         self.content_area = BoxLayout(orientation='vertical', size_hint=(1, 1))  # Create content area
         main_layout.add_widget(self.content_area)  # Add content area to the main layout
@@ -163,13 +168,31 @@ class LoadSpecificImageApp(App):
         self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
         self.content_area.clear_widgets()  # Clear previous content
         
-        if text == "Settings":
+        if text == "Change Background":
+            self.change_background()  # Call the method to change the background
+        elif text == "Settings":
+
             logging.info("Loading SettingsScreen")  # Log when loading the settings screen
             settings_screen = SettingsScreen()  # Create an instance of the settings screen
             popup = Popup(title="Settings", content=settings_screen, size_hint=(0.8, 0.8))  # Create a Popup for the settings screen
             popup.open()  # Open the popup
 
-    def on_serial_spinner_select(self, spinner, text): 
+    def change_background(self):
+        filechooser = FileChooserIconView()  # Create a file chooser
+        filechooser.bind(on_submit=self.load_background)  # Bind the submit event to load the background
+        popup = Popup(title="Select Background Image", content=filechooser, size_hint=(0.9, 0.9))  # Create a popup for the file chooser
+        popup.open()  # Open the popup
+
+    def load_background(self, instance, selection, touch):
+        if selection:  # Check if a file was selected
+            image_source = selection[0]  # Get the selected file path
+            self.background_image.source = image_source  # Update the background image source
+            self.background_image.reload()  # Reload the image to display it
+            logging.info(f"Background image changed to: {image_source}")  # Log the change
+
+
+    def on_serial_spinner_select(self, spinner, text):
+
         self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
         self.content_area.clear_widgets()  # Clear previous content
         if self.submenu:
@@ -189,6 +212,46 @@ class LoadSpecificImageApp(App):
 
 
         logging.info(f'Serial protocol changed to: {text}')  # Log the change
+
+    def on_tcp_spinner_select(self, spinner, text): 
+        self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
+        self.content_area.clear_widgets()  # Clear previous content
+        if self.submenu:
+            self.content_area.remove_widget(self.submenu)  # Remove previous submenu if it exists
+        self.submenu = BoxLayout(orientation='vertical')  # Create a new submenu layout
+        self.submenu.add_widget(Label(text=f"You selected: {text}"))  # Update content area
+        connect_button = Button(text="Connect")
+        connect_button.bind(on_press=self.connect)  # Bind connect function
+        self.submenu.add_widget(connect_button)  # Add Connect button
+        disconnect_button = Button(text="Disconnect")
+        disconnect_button.bind(on_press=self.disconnect)  # Bind disconnect function
+        self.submenu.add_widget(disconnect_button)  # Add Disconnect button
+        settings_button = Button(text="Settings")
+        settings_button.bind(on_press=self.open_settings)  # Bind open settings function
+        self.submenu.add_widget(settings_button)  # Add Settings button
+        self.content_area.add_widget(self.submenu)  # Add the submenu to the content area
+
+        logging.info(f'TCP protocol changed to: {text}')  # Log the change
+
+    def on_udp_spinner_select(self, spinner, text): 
+        self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
+        self.content_area.clear_widgets()  # Clear previous content
+        if self.submenu:
+            self.content_area.remove_widget(self.submenu)  # Remove previous submenu if it exists
+        self.submenu = BoxLayout(orientation='vertical')  # Create a new submenu layout
+        self.submenu.add_widget(Label(text=f"You selected: {text}"))  # Update content area
+        connect_button = Button(text="Connect")
+        connect_button.bind(on_press=self.connect)  # Bind connect function
+        self.submenu.add_widget(connect_button)  # Add Connect button
+        disconnect_button = Button(text="Disconnect")
+        disconnect_button.bind(on_press=self.disconnect)  # Bind disconnect function
+        self.submenu.add_widget(disconnect_button)  # Add Disconnect button
+        settings_button = Button(text="Settings")
+        settings_button.bind(on_press=self.open_settings)  # Bind open settings function
+        self.submenu.add_widget(settings_button)  # Add Settings button
+        self.content_area.add_widget(self.submenu)  # Add the submenu to the content area
+
+        logging.info(f'UDP protocol changed to: {text}')  # Log the change
 
     def on_odb_spinner_select(self, spinner, text):
         self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
@@ -228,26 +291,6 @@ class LoadSpecificImageApp(App):
         settings_screen = SettingsScreen()  # Create an instance of the settings screen
         popup = Popup(title="Settings", content=settings_screen, size_hint=(0.8, 0.8))  # Create a Popup for the settings screen
         popup.open()  # Open the popup
-
-    def on_tcp_spinner_select(self, spinner, text): 
-        self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
-        self.content_area.clear_widgets()  # Clear previous content
-        self.content_area.add_widget(Label(text=f"You selected: {text}"))  # Update content area
-        self.content_area.add_widget(Label(text="Connect"))  # Add connect option
-        self.content_area.add_widget(Label(text="Disconnect"))  # Add disconnect option
-        self.content_area.add_widget(Label(text="Settings"))  # Add settings option
-        self.content_area.add_widget(Label(text="Status"))  # Add status option
-        logging.info(f'TCP protocol changed to: {text}')  # Log the change
-
-    def on_udp_spinner_select(self, spinner, text): 
-        self.header_label.text = f"Current Selection: {text}"  # Update header with selected option
-        self.content_area.clear_widgets()  # Clear previous content
-        self.content_area.add_widget(Label(text=f"You selected: {text}"))  # Update content area
-        self.content_area.add_widget(Label(text="Connect"))  # Add connect option
-        self.content_area.add_widget(Label(text="Disconnect"))  # Add disconnect option
-        self.content_area.add_widget(Label(text="Settings"))  # Add settings option
-        self.content_area.add_widget(Label(text="Status"))  # Add status option
-        logging.info(f'UDP protocol changed to: {text}')  # Log the change
 
 if __name__ == '__main__':
     LoadSpecificImageApp().run()
