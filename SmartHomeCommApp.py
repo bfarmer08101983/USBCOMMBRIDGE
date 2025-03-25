@@ -1,7 +1,7 @@
 import logging
-import minimalmodbus
-import pymodbus
-import canopen
+import minimalmodbus  # For Modbus RTU
+import pymodbus  # For Modbus TCP/IP
+import can  # For CANOpen
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -11,6 +11,18 @@ from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.uix.spinner import Spinner
 import json
+# import smbus2  # For I2C
+
+# import spidev  # For SPI
+
+import paho.mqtt.client as mqtt  # For MQTT
+import obd  # Updated import for OBD-II communication
+
+import aiocoap  # For CoAP
+import websocket  # For WebSocket
+#import pyLoRaWAN  # For LoRaWAN
+import pyprofibus  # For PROFIBUS
+import can  # For CAN communication
 
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -24,41 +36,38 @@ class SmartHomeCommApp(App):
         self.protocol_spinner = Spinner(
             text="Select Protocol",
             values=(
-                'FINS',
-                'Modbus RTU',
-                'CANOpen',
-                'Text/ASCII',
-                'I2C',
-                'SPI',
-                'RS232',
-                'RS485',
-                'TTL',
-                'CTRL CMD',
-                'MQTT',
-                'CoAP',
-                'HTTP',
-                'WebSocket',
-                'Zigbee',
-                'Z-Wave',
-                'LoRaWAN',
-                'Modbus TCP/IP',
-                'EtherNet/IP',
-                'PROFIBUS',
-                'CAN',
-                'DeviceNet',
-                'JTAG',
-                'OBD-II',
-                'CAN',
-                'ISO 9141',
-                'KWP2000',
-                'Z-Wave',
-                'ZigBee',
-                'Wi-Fi',
-                'Bluetooth Low Energy (BLE)',
-                'Ethernet',
-                'Thread',
-                'Matter'
-
+                'FINS',  # Custom implementation
+                'Modbus RTU',  # minimalmodbus
+                'CANOpen',  # canopen
+                'Text/ASCII',  # Custom implementation
+                'I2C',  # smbus2
+                'SPI',  # spidev
+                'RS232',  # pyserial
+                'RS485',  # pyserial
+                'TTL',  # Custom implementation
+                'CTRL CMD',  # Custom implementation
+                'MQTT',  # paho-mqtt
+                'CoAP',  # aiocoap
+                'HTTP',  # Custom implementation
+                'WebSocket',  # websocket-client
+                'Zigbee',  # Custom implementation
+                'Z-Wave',  # pyZWave
+                'LoRaWAN',  # pyLoRa
+                'Modbus TCP/IP',  # pymodbus
+                'EtherNet/IP',  # pycomm3
+                'PROFIBUS',  # pyprofibus
+                'CAN',  # python-can
+                'DeviceNet',  # Custom implementation
+                'JTAG',  # pyJTAG
+                'OBD-II',  # python-OBD
+                'ISO 9141',  # Removed pyISO9141
+                'KWP2000',  # openobd
+                'ZigBee',  # Custom implementation
+                'Wi-Fi',  # Custom implementation
+                'Bluetooth Low Energy (BLE)',  # bluepy
+                'Ethernet',  # Custom implementation
+                'Thread',  # Custom implementation
+                'Matter'  # Custom implementation
             ),
             size_hint=(0.2, None),
             height=40
@@ -213,3 +222,4 @@ class SmartHomeCommApp(App):
 
 if __name__ == '__main__':
     SmartHomeCommApp().run()
+

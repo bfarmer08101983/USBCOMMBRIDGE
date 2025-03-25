@@ -11,106 +11,65 @@
 # Library: canopen
 # Description: A library for CANopen protocol communication, used in embedded systems and industrial automation.
 
+# Library: python-can
+# Description: A library for Controller Area Network (CAN) communication, allowing interaction with CAN devices.
+
 # Library: kivy
 # Description: A framework for building multi-touch applications, providing UI components and tools for application development.
 
 # Library: json
 # Description: Standard library for handling JSON data, allowing for easy serialization and deserialization of data.
 
-# Library: python-OBD
+# Library: paho-mqtt
+# Description: A library for MQTT communication.
+
+# Library: aiocoap
+# Description: A library for CoAP communication.
+
+# Library: websocket-client
+# Description: A library for WebSocket communication.
+
+# Library: pyLoRa
+# Description: A library for LoRaWAN communication.
+
+# Library: pyprofibus
+# Description: A library for PROFIBUS communication.
+
+# Library: obd
 # Description: A library for OBD-II communication, enabling interaction with vehicle diagnostic systems.
 
-# Library: pyJTAG
-# Description: A library for JTAG communication, used for debugging and programming embedded systems.
+# Library: python-OBD-wifi
+# Description: A library for OBD-II communication over WiFi, enabling interaction with vehicle diagnostic systems.
 
-# Library: pyZWave
-# Description: A library for Z-Wave communication, used in home automation systems.
+# Library: pyI2C
+# Description: A library for I2C communication on Windows.
 
-# Library: pyZigbee
-# Description: A library for ZigBee communication, used in wireless sensor networks and home automation.
+# Library: spidev
+# Description: A library for interfacing with SPI devices.
 
-# Library: bluepy
-# Description: A library for Bluetooth Low Energy (BLE) communication, allowing interaction with BLE devices.
+# Library: pySerial
+# Description: A library for serial communication in Python.
 
-# Library: socket
-# Description: Standard library for network communication, used for TCP/IP and UDP communication.
+# Library: RPi.GPIO
+# Description: A library for controlling GPIO pins on Raspberry Pi.
 
-# Library: threading
-# Description: Standard library for creating and managing threads in Python, allowing for concurrent execution of code.
+# Library: smbus2
+# Description: A library for I2C communication in Python.
 
-# Library: Matter SDK
-# Description: Official SDK for the Matter protocol, enabling interoperability among smart home devices.
+# Library: aiocoap
+# Description: A library for CoAP communication.
 
-# Library: I2C
-# Description: Libraries like smbus or smbus2 can be used for I2C communication.
+# Library: websocket-client
+# Description: A library for WebSocket communication.
 
-# Library: SPI
-# Description: Libraries like spidev can be used for SPI communication.
+# Library: pyLoRa
+# Description: A library for LoRaWAN communication.
 
-# Library: MQTT
-# Description: Libraries like paho-mqtt can be used for MQTT communication.
+# Library: pyprofibus
+# Description: A library for PROFIBUS communication.
 
-# Library: CoAP
-# Description: Libraries like aiocoap can be used for CoAP communication.
-
-# Library: WebSocket
-# Description: Libraries like websocket-client can be used for WebSocket communication.
-
-# Library: LoRaWAN
-# Description: Libraries like pyLoRa can be used for LoRaWAN communication.
-
-# Library: EtherNet/IP
-# Description: Libraries like pycomm3 can be used for EtherNet/IP communication.
-
-# Library: PROFIBUS
-# Description: Libraries like pyprofibus can be used for PROFIBUS communication.
-
-# Library: DeviceNet
-# Description: Use dnetmod from https://github.com/gdsotirov/dnetmod for DeviceNet communication.
-
-# Library: ISO 9141
-# Description: Libraries like pyISO9141 can be used for ISO 9141 communication.
-
-# Library: KWP2000
-# Description: Libraries like pyKWP2000 can be used for KWP2000 communication.
-
-
-
-# Library: logging
-# Description: Standard library for logging messages and debugging information.
-
-# Library: minimalmodbus
-# Description: A library for Modbus RTU communication, allowing interaction with Modbus devices.
-
-# Library: pymodbus
-# Description: A library for Modbus TCP communication, enabling communication with Modbus servers over TCP/IP.
+# Library: python-can
+# Description: A library for Controller Area Network (CAN) communication.
 
 # Library: canopen
-# Description: A library for CANopen protocol communication, used in embedded systems and industrial automation.
-
-# Library: kivy
-# Description: A framework for building multi-touch applications, providing UI components and tools for application development.
-
-# Library: json
-# Description: Standard library for handling JSON data, allowing for easy serialization and deserialization of data.
-
-# Library: python-OBD
-# Description: A library for OBD-II communication, enabling interaction with vehicle diagnostic systems.
-
-# Library: pyJTAG
-# Description: A library for JTAG communication, used for debugging and programming embedded systems.
-
-# Library: pyZWave
-# Description: A library for Z-Wave communication, used in home automation systems.
-
-# Library: pyZigbee
-# Description: A library for ZigBee communication, used in wireless sensor networks and home automation.
-
-# Library: bluepy
-# Description: A library for Bluetooth Low Energy (BLE) communication, allowing interaction with BLE devices.
-
-# Library: socket
-# Description: Standard library for network communication, used for TCP/IP and UDP communication.
-
-# Library: threading
-# Description: Standard library for creating and managing threads in Python, allowing for concurrent execution of code.
+# Description: A library for CANopen protocol communication.
