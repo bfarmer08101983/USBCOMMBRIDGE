@@ -55,7 +55,7 @@ To get started with the Smart Home Communication App, follow these steps:
    ```
 3. Run the application using:
    ```
-   python SmartHomeCommApp.py
+   python pyOMNIComm.py
    ```
 
 ## Contributing
