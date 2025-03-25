@@ -19,6 +19,8 @@ USB COMM BRIDGE V2 is a Kivy application designed to facilitate communication wi
 ## Version History
 - **Version 1.0**: Initial release with basic functionality.
 - **Version 1.1**: Added settings management and connection options.
+- **Version 1.2**: Simplified settings management to include Kivy Settings and App Settings buttons, allowing users to load and edit settings from `settings.py`.
+
 
 ## Future Improvements
 - Implement additional protocols.
