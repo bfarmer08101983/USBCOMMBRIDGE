@@ -1,4 +1,6 @@
 import logging
+__version__ = "1.0.0"  # Version tracking for the application
+
 import minimalmodbus  # For Modbus RTU
 import pymodbus  # For Modbus TCP/IP
 import can  # For CANOpen
@@ -222,4 +224,3 @@ class SmartHomeCommApp(App):
 
 if __name__ == '__main__':
     SmartHomeCommApp().run()
-
