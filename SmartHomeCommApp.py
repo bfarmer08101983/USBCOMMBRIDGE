@@ -10,7 +10,6 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.uix.spinner import Spinner
-from kivy.uix.image import Image
 import json
 
 # Set up logging
@@ -20,10 +19,6 @@ class SmartHomeCommApp(App):
     def build(self):
         self.title = "Smart Home Communication App"
         layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
-
-        # Load background image
-        self.background_image = Image(source='background.png', allow_stretch=True)  # Ensure you have a background.png file in the same directory
-        layout.add_widget(self.background_image)
 
         # Protocol selection spinner
         self.protocol_spinner = Spinner(
@@ -51,27 +46,40 @@ class SmartHomeCommApp(App):
                 'PROFIBUS',
                 'CAN',
                 'DeviceNet',
+                'JTAG',
+                'OBD-II',
+                'CAN',
+                'ISO 9141',
+                'KWP2000',
+                'Z-Wave',
+                'ZigBee',
+                'Wi-Fi',
+                'Bluetooth Low Energy (BLE)',
+                'Ethernet',
+                'Thread',
+                'Matter'
+
             ),
             size_hint=(0.2, None),
             height=40
         )
         layout.add_widget(self.protocol_spinner)
 
-        connect_button = Button(text="Connect")
+        connect_button = Button(text="Connect", size_hint=(0.2, None), height=50)
         connect_button.bind(on_press=self.show_connection_settings)  # Show settings on connect
         layout.add_widget(connect_button)
 
-        disconnect_button = Button(text="Disconnect")
+        disconnect_button = Button(text="Disconnect", size_hint=(0.2, None), height=50)
         disconnect_button.bind(on_press=self.disconnect)
         layout.add_widget(disconnect_button)
 
         # Load settings button
-        load_settings_button = Button(text="Load Settings")
+        load_settings_button = Button(text="Load Settings", size_hint=(0.2, None), height=50)
         load_settings_button.bind(on_press=self.load_settings)
         layout.add_widget(load_settings_button)
 
         # Save settings button
-        save_settings_button = Button(text="Save Settings")
+        save_settings_button = Button(text="Save Settings", size_hint=(0.2, None), height=50)
         save_settings_button.bind(on_press=self.save_settings)
         layout.add_widget(save_settings_button)
 
@@ -98,7 +106,27 @@ class SmartHomeCommApp(App):
         return layout
 
     def on_protocol_select(self, spinner, text):
-        self.connection_settings_layout.opacity = 1  # Show connection settings when a protocol is selected
+        if text in ['RS232', 'RS485']:  # Check if the selected protocol is a serial protocol
+            self.show_serial_settings()  # Show serial settings layout
+            self.connection_settings_layout.opacity = 1  # Show connection settings for serial protocols
+        elif text in ['FINS', 'Modbus RTU', 'CANOpen', 'MQTT']:  # Check if the selected protocol requires IP settings
+            self.connection_settings_layout.opacity = 1  # Show connection settings for IP protocols
+        else:  # Hide settings for other protocols
+            self.connection_settings_layout.opacity = 0  # Ensure settings are hidden for unsupported protocols
+
+    def show_serial_settings(self):
+        # Clear existing inputs
+        self.connection_settings_layout.clear_widgets()  # Clear existing inputs
+        self.connection_settings_layout.add_widget(Label(text="Serial Settings"))  # Add label for serial settings
+        
+        # Add serial settings inputs
+        self.baudrate_input = TextInput(hint_text='Baud Rate')  # Add baud rate input for serial
+        self.data_bits_input = TextInput(hint_text='Data Bits')  # Add data bits input for serial
+        self.stop_bits_input = TextInput(hint_text='Stop Bits')  # Add stop bits input for serial
+        
+        self.connection_settings_layout.add_widget(self.baudrate_input)  # Add baud rate input to layout
+        self.connection_settings_layout.add_widget(self.data_bits_input)  # Add data bits input to layout
+        self.connection_settings_layout.add_widget(self.stop_bits_input)  # Add stop bits input to layout
 
     def show_connection_settings(self, instance):
         # Logic to handle connection when the button is pressed
