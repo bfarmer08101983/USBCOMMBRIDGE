@@ -2,6 +2,39 @@
 
 ## Key Features
 
+### Supported Protocols
+The application supports the following communication protocols:
+- FINS
+- Modbus RTU
+- CANOpen
+- MQTT
+- I2C
+- SPI
+- RS232
+- RS485
+- TTL
+- CTRL CMD
+- CoAP
+- HTTP
+- WebSocket
+- Zigbee
+- Z-Wave
+- LoRaWAN
+- Modbus TCP/IP
+- EtherNet/IP
+- PROFIBUS
+- DeviceNet
+- JTAG
+- OBD-II
+- ISO 9141
+- KWP2000
+- Wi-Fi
+- Bluetooth Low Energy (BLE)
+- Ethernet
+- Thread
+- Matter
+
+
 1. **Protocol Selection**: Users can select from various communication protocols using spinners, allowing for easy navigation and selection. This feature simplifies the process of connecting to different devices.
 
 2. **Connection Management**: The application provides options to connect and disconnect from devices for each selected protocol, facilitating seamless communication. Users can easily manage their connections without hassle.
