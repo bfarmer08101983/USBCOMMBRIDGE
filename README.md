@@ -1,4 +1,5 @@
-# Smart Home Communication App
+# pyOMNIComm - a Swiss Army Knife Communication App
+
 
 ## Key Features
 
