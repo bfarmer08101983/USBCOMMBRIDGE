@@ -13,7 +13,8 @@ from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.uix.spinner import Spinner
 import json
-# import smbus2  # For I2C
+import platform  # For OS detection
+import pigpio  # For I2C
 
 # import spidev  # For SPI
 
@@ -25,11 +26,24 @@ import websocket  # For WebSocket
 #import pyLoRaWAN  # For LoRaWAN
 import pyprofibus  # For PROFIBUS
 import can  # For CAN communication
+from fins.tcp import TCPFinsConnection  # Importing TCPFinsConnection from fins package
 
 # Set up logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class SmartHomeCommApp(App):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if platform.system() == "Linux":  # Check if running on Raspberry Pi
+            import smbus2  # For I2C
+            self.pi = pigpio.pi()  # Initialize pigpio
+            self.i2c_bus = self.pi.i2c_open(1, 0x20)  # Open I2C bus 1 with address 0x20
+        elif platform.system() == "Windows":  # Check if running on Windows
+            logging.warning("I2C communication is not supported on Windows. Use a compatible library or method.")
+            self.i2c_bus = None  # Placeholder for Windows
+        else:
+            logging.error("Unsupported OS for I2C communication.")
+
     def build(self):
         self.title = "Smart Home Communication App"
         layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
@@ -130,7 +144,10 @@ class SmartHomeCommApp(App):
         self.connection_settings_layout.clear_widgets()  # Clear existing inputs
         self.connection_settings_layout.add_widget(Label(text="Serial Settings"))  # Add label for serial settings
         
-        # Add serial settings inputs
+        # Add SPI settings inputs
+        self.spi_device_input = TextInput(hint_text='SPI Device')  # Add SPI device input
+        self.connection_settings_layout.add_widget(self.spi_device_input)  # Add SPI device input to layout
+
         self.baudrate_input = TextInput(hint_text='Baud Rate')  # Add baud rate input for serial
         self.data_bits_input = TextInput(hint_text='Data Bits')  # Add data bits input for serial
         self.stop_bits_input = TextInput(hint_text='Stop Bits')  # Add stop bits input for serial
@@ -143,12 +160,33 @@ class SmartHomeCommApp(App):
         # Logic to handle connection when the button is pressed
         self.connect(instance)
 
+    def read_spi(self, address, num_bytes):
+        """Read bytes from SPI device.""" 
+        if platform.system() == "Linux":
+            # Implement SPI read using spidev or another method
+            logging.error("SPI read not implemented for Windows. Use a compatible library or method.")
+            return None
+        else:
+            logging.error("SPI functionality not available on this OS.")
+            return None
+
+    def write_spi(self, address, data):
+        """Write bytes to SPI device.""" 
+        if platform.system() == "Linux":
+            # Implement SPI write using spidev or another method
+            logging.error("SPI write not implemented for Windows. Use a compatible library or method.")
+        else:
+            logging.error("SPI functionality not available on this OS.")
+
     def connect(self, instance):
         protocol = self.protocol_spinner.text
         ip_address = self.ip_input.text
         port = self.port_input.text
 
         if protocol == 'FINS':
+            if not ip_address or not port:
+                logging.error("IP address and port must be provided for FINS connection.")
+                return
             self.connect_fins(ip_address, port)
         elif protocol == 'Modbus RTU':
             self.connect_modbus_rtu(ip_address, port)
@@ -162,37 +200,52 @@ class SmartHomeCommApp(App):
 
     def connect_fins(self, ip_address, port):
         logging.info(f"Connecting using FINS protocol to {ip_address}:{port}")
-        # Implement FINS connection logic here
-        # Example: Create a FINS client and connect
-        # client = fins.FinsClient(ip_address, port)
-        # client.connect()
+        # Example connection logic for FINS protocol
+        try:
+            fins_connection = TCPFinsConnection()  # Create an instance of TCPFinsConnection
+            fins_connection.connect(ip_address, int(port))  # Establish the connection
+
+            logging.info("FINS connection established successfully.")
+        except Exception as e:
+            logging.error(f"Failed to connect using FINS protocol: {e}")
 
     def connect_modbus_rtu(self, ip_address, port):
         logging.info(f"Connecting using Modbus RTU protocol to {ip_address}:{port}")
-        # Implement Modbus RTU connection logic here
-        # Example: Create a Modbus RTU client and connect
-        # client = minimalmodbus.Instrument(ip_address, port)
-        # client.connect()
+        # Example connection logic for Modbus RTU protocol
+        try:
+            modbus_connection = minimalmodbus.Instrument(port, 1)  # Example setup
+            modbus_connection.serial.baudrate = 9600
+            modbus_connection.serial.timeout = 1
+            logging.info("Modbus RTU connection established successfully.")
+        except Exception as e:
+            logging.error(f"Failed to connect using Modbus RTU protocol: {e}")
 
     def connect_canopen(self, ip_address, port):
         logging.info(f"Connecting using CANOpen protocol to {ip_address}:{port}")
-        # Implement CANOpen connection logic here
-        # Example: Create a CANOpen client and connect
-        # network = canopen.Network()
-        # network.connect()
+        # Example connection logic for CANOpen protocol
+        try:
+            import canopen  # Import the canopen module
+            canopen_connection = canopen.Network()  # Create an instance of the CANOpen network
+
+            canopen_connection.connect()
+            logging.info("CANOpen connection established successfully.")
+        except Exception as e:
+            logging.error(f"Failed to connect using CANOpen protocol: {e}")
 
     def connect_mqtt(self, ip_address, port):
         logging.info(f"Connecting using MQTT protocol to {ip_address}:{port}")
-        # Implement MQTT connection logic here
-        # Example: Create an MQTT client and connect
-        # client = mqtt.Client()
-        # client.connect(ip_address, port)
+        # Example connection logic for MQTT protocol
+        try:
+            mqtt_client = mqtt.Client()
+            mqtt_client.connect(ip_address, int(port))  # Pass the port as an integer
+            mqtt_client.loop_start()
+            logging.info("MQTT connection established successfully.")
+        except Exception as e:
+            logging.error(f"Failed to connect using MQTT protocol: {e}")
 
     def disconnect(self, instance):
         logging.info("Disconnecting from device")
         # Implement disconnection logic here
-        # This will include closing any active connections
-        # Example: client.disconnect() for each protocol
 
     def load_settings(self, instance):
         try:

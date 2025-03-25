@@ -1,39 +1,42 @@
 # pyOMNIComm - a Swiss Army Knife Communication App
-
+-WORK IN PROGRESS
 
 ## Key Features
+- **Multi-Protocol Support**: Supports various communication protocols, including TCP, UDP, HTTP, and more
+- **Multi-Platform Support**: Compatible with Windows, macOS, and Linux platforms
+- **Real-time Messaging**: Enables real-time messaging and data exchange between devices and applications
 
 ### Supported Protocols
 The application supports the following communication protocols:
-- FINS
-- Modbus RTU
-- CANOpen
-- MQTT
-- I2C
-- SPI
-- RS232
-- RS485
-- TTL
-- CTRL CMD
-- CoAP
-- HTTP
-- WebSocket
-- Zigbee
-- Z-Wave
-- LoRaWAN
-- Modbus TCP/IP
-- EtherNet/IP
-- PROFIBUS
-- DeviceNet
-- JTAG
-- OBD-II
-- ISO 9141
-- KWP2000
-- Wi-Fi
-- Bluetooth Low Energy (BLE)
+- FINS (Fujitsu Inter-NODE System)
+- Modbus RTU (Remote Terminal Unit)
+- CANOpen   
+- MQTT (Message Queuing Telemetry Transport)
+- I2C (Inter-Integrated Circuit)
+- SPI (Serial Peripheral Interface)
+- RS232 (Recommended Standard 232)
+- RS485 (Recommended Standard 485)
+- TTL (Transistor-Transistor Logic)
+- CTRL CMD (Control Command)
+- CoAP (Constrained Application Protocol)
+- HTTP (Hypertext Transfer Protocol)
+- WebSocket (WebSockets Protocol)
+- Zigbee (Zigbee Protocol)
+- Z-Wave (Z-Wave Protocol)
+- LoRaWAN (Long Range Wide Area Network)
+- Modbus TCP/IP (Modbus over TCP/IP)
+- EtherNet/IP (EtherNet/IP Protocol)
+- PROFIBUS (PROFIBUS Protocol)
+- DeviceNet (DeviceNet Protocol)
+- JTAG (Joint Test Action Group)
+- OBD-II (On-Board Diagnostics II)
+- ISO 9141 -2 (ISO 9141-2 Protocol)
+- KWP2000 (Keyless Entry and Push Start 2000)
+- Wi-Fi  
+- Bluetooth Low Energy (BLE)  
 - Ethernet
-- Thread
-- Matter
+- Thread    
+- Matter    
 
 
 1. **Protocol Selection**: Users can select from various communication protocols using spinners, allowing for easy navigation and selection. This feature simplifies the process of connecting to different devices.
